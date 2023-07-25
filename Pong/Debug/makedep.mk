@@ -4,6 +4,8 @@
 
 Assembler1.s
 
+Input.c
+
 main.c
 
 Speaker.c

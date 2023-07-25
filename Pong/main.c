@@ -15,6 +15,7 @@
 #include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "Input.h"
 
 #define F_CPU 16000000UL
 
@@ -50,23 +51,13 @@ ISR(TIMER1_COMPA_vect){
 int main(void)
 {
 	cli();
+	PollInputs();
+	DDRC |= (0 << DDRC5);
+	PORTC |= (1 << PORTC5);
+	DDRB |= (1 << DDRB5);
 	while (1)
 	{
-		 Play_speaker(261,4000);
-		 _delay_ms(5000);
-		 Play_speaker(261,4000);
-		 _delay_ms(5000);
-		 Play_speaker(392,4000);
-		 _delay_ms(5000);
-		 Play_speaker(392,4000);
-		 _delay_ms(5000);
-		 Play_speaker(440,4000);
-		 _delay_ms(5000);
-		 Play_speaker(440,4000);
-		 _delay_ms(5000);
-		 Play_speaker(392,4000);
-		 _delay_ms(5000);
-		 _delay_ms(16000);
+		PollInputs();
 	}
 }
 
