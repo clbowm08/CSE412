@@ -5,7 +5,7 @@
  * Author : Clbow
  */ 
  // Lab3P1.c
- // ooooe
+ //
  // Created: 1/30/2018 4:04:52 AM
  // Author : Your name
  // Copyright 2018, All Rights Reserved
