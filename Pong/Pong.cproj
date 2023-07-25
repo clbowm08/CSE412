@@ -155,13 +155,13 @@
     <Compile Include="Input.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Speaker.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Speaker.c">
+    <Compile Include="Sound.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Sound_int.s">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
