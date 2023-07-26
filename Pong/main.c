@@ -1,10 +1,4 @@
-/*
- * Pong.c
- *
- * Created: 7/25/2023 10:51:14 AM
- * Author : Clbow
- */ 
- // Lab3P1.c
+ // PONG Project
  //
  // Created: 1/30/2018 4:04:52 AM
  // Author : Your name
@@ -51,13 +45,12 @@ ISR(TIMER1_COMPA_vect){
 int main(void)
 {
 	cli();
-	PollInputs();
-	DDRC |= (0 << DDRC5);
-	PORTC |= (1 << PORTC5);
-	DDRB |= (1 << DDRB5);
+	struct Player player[2];
+	InitInputs(player);
 	while (1)
 	{
-		PollInputs();
+		PollInputs(player);
+		CheckInputs(player);
 	}
 }
 

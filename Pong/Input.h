@@ -5,12 +5,28 @@
  *  Author: Clbow
  */ 
 
+#define BUTTON_PORTS				PINC
+#define FIRST_BUTTON_PIN_LOCATION	0x08
+#define SECOND_BUTTON_PIN_LOCATION	0x04
+#define THIRD_BUTTON_PIN_LOCATION	0x02
+#define FOURTH_BUTTON_PIN_LOCATION	0x01
+
+#include <stdbool.h>
 
 #ifndef INPUT_H_
 #define INPUT_H_
 
-void PollInputs();
+typedef struct Player 
+{
+	bool upFlag;
+	bool downFlag;
+}Player_t;
 
+void InitInputs(struct Player *player);
+
+void PollInputs(struct Player *player);
+
+void CheckInputs(struct Player *player);
 
 
 #endif /* INPUT_H_ */
