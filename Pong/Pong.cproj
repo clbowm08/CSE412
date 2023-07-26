@@ -152,10 +152,19 @@
     <Compile Include="Input.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="LCD.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LCD.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Sound.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Sound.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Sound_int.s">

@@ -4,6 +4,8 @@
 
 Input.c
 
+LCD.c
+
 main.c
 
 Sound.c

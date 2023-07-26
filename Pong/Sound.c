@@ -9,6 +9,7 @@
 #include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "Sound.h"
 
 #define F_CPU 16000000UL
 

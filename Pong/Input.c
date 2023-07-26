@@ -4,7 +4,10 @@
  * Created: 7/25/2023 11:45:55 AM
  *  Author: Clbow
  */ 
+ #define F_CPU 16000000UL
 #include "Input.h"
+#include "Sound.h"
+#include "LCD.h"
 #include <avr/io.h>
 
 void InitInputs(struct Player *player)
@@ -110,6 +113,7 @@ void CheckInputs(struct Player *player)
 	if (lightOn)
 	{
 		PORTB = (1 << PORTB5);
+		SendCommand(0x0E);
 	}
 	else
 	{
