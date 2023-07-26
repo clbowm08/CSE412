@@ -15,7 +15,9 @@
 
 void InitLCD();
 
-void SendCommand(int command);
+void SendCommand(unsigned short command);
+
+void SendData(unsigned short data);
 
 
 

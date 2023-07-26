@@ -16,10 +16,22 @@ int main(void)
 	struct Player player[2];
 	InitInputs(player);
 	InitLCD();
-	while (1)
-	{
-		PollInputs(player);
-		CheckInputs(player);
+	SendCommand(0x08);
+    while (1)
+    {
+	    PollInputs(player);
+	    CheckInputs(player);
+
+	    // Clear the display before writing the string
+	    SendCommand(0x08);
+		if (TWSR0 == 0x68)
+		{
+			PORTB = (1 << PORTB5);
+		}
+		else
+		{
+			PORTB = (0 << PORTB5);
+		}
 	}
 }
 

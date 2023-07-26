@@ -19,10 +19,10 @@ void InitInputs(struct Player *player)
 	player[1].upFlag = false;
 	
 	//Initializing data direction register for button ports to be Inputs
-	DDRC |= (0 << DDRC5);
-	DDRC |= (0 << DDRC4);
 	DDRC |= (0 << DDRC3);
 	DDRC |= (0 << DDRC2);
+	DDRC |= (0 << DDRC1);
+	DDRC |= (0 << DDRC0);
 	
 	//Initializing ports of buttons to produce a signal enabling ()
 	PORTC |= (1 << PORTC3);
@@ -113,7 +113,6 @@ void CheckInputs(struct Player *player)
 	if (lightOn)
 	{
 		PORTB = (1 << PORTB5);
-		SendCommand(0x0E);
 	}
 	else
 	{
