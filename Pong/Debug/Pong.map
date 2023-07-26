@@ -1,17 +1,17 @@
 Archive member included to satisfy reference by file (symbol)
 
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodsi4.o)
-                              main.o (__divmodsi4)
+                              Sound.o (__divmodsi4)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_negsi2.o)
                               c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodsi4.o) (__negsi2)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
                               C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o (exit)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_copy_data.o)
-                              main.o (__do_copy_data)
+                              Sound.o (__do_copy_data)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_clear_bss.o)
-                              main.o (__do_clear_bss)
+                              Sound.o (__do_clear_bss)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_mulshisi3.o)
-                              main.o (__mulshisi3)
+                              Sound.o (__mulshisi3)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
                               c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodsi4.o) (__udivmodsi4)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_muluhisi3.o)
@@ -23,23 +23,22 @@ Discarded input sections
 
  .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
  .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
- .data          0x00000000        0x0 Assembler1.o
- .bss           0x00000000        0x0 Assembler1.o
  .text          0x00000000        0x0 Input.o
  .data          0x00000000        0x0 Input.o
  .bss           0x00000000        0x0 Input.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
+ .text          0x00000000        0x0 Sound.o
+ .data          0x00000000        0x0 Sound.o
+ .bss           0x00000000        0x0 Sound.o
+ .text.SET_SPEAKER_PARAMS
+                0x00000000       0x56 Sound.o
  .text.Play_speaker
-                0x00000000       0x6e main.o
- .bss.cycle     0x00000000        0x1 main.o
- .text          0x00000000        0x0 Speaker.o
- .data          0x00000000        0x0 Speaker.o
- .bss           0x00000000        0x0 Speaker.o
- .debug_line    0x00000000        0x0 Speaker.o
- .debug_str     0x00000000       0xf5 Speaker.o
- .comment       0x00000000       0x31 Speaker.o
+                0x00000000       0x6e Sound.o
+ .data.g_freq   0x00000000        0x2 Sound.o
+ .data          0x00000000        0x0 Sound_int.o
+ .bss           0x00000000        0x0 Sound_int.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodsi4.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodsi4.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodsi4.o)
@@ -201,10 +200,10 @@ Linker script and memory map
 
 Address of section .data set to 0x800100
 LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
-LOAD Assembler1.o
 LOAD Input.o
 LOAD main.o
-LOAD Speaker.o
+LOAD Sound.o
+LOAD Sound_int.o
 START GROUP
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a
 END GROUP
@@ -314,7 +313,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x21e
+.text           0x00000000      0x1d6
  *(.vectors)
  .vectors       0x00000000       0xb4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
                 0x00000000                __vector_default
@@ -417,24 +416,23 @@ END GROUP
                 0x000000ee                __vector_18
                 0x000000ee                __vector_20
                 0x000000ee                __vector_42
- .text          0x000000f2       0xba Assembler1.o
-                0x000000f2                SET_SPEAKER_PARAMS
-                0x0000013a                TIM1_COMPA
-                0x000001ac                . = ALIGN (0x2)
+ .text          0x000000f2       0x72 Sound_int.o
+                0x000000f2                TIM1_COMPA
+                0x00000164                . = ALIGN (0x2)
  *(.text.*)
  .text.PollInputs
-                0x000001ac        0xa Input.o
-                0x000001ac                PollInputs
+                0x00000164        0xa Input.o
+                0x00000164                PollInputs
+ .text.main     0x0000016e       0x1c main.o
+                0x0000016e                main
  .text.__vector_11
-                0x000001b6       0x48 main.o
-                0x000001b6                __vector_11
- .text.main     0x000001fe       0x1c main.o
-                0x000001fe                main
-                0x0000021a                . = ALIGN (0x2)
+                0x0000018a       0x48 Sound.o
+                0x0000018a                __vector_11
+                0x000001d2                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000021a        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000021a                _exit
-                0x0000021a                exit
+ .fini9         0x000001d2        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x000001d2                _exit
+                0x000001d2                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -453,25 +451,25 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000021a        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x000001d2        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000021e                _etext = .
+                0x000001d6                _etext = .
 
-.data           0x00800100        0x4 load address 0x0000021e
+.data           0x00800100        0x4 load address 0x000001d6
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
  .data.max_cycle_H
-                0x00800100        0x1 main.o
+                0x00800100        0x1 Sound.o
                 0x00800100                max_cycle_H
  .data.max_cycle_L
-                0x00800101        0x1 main.o
+                0x00800101        0x1 Sound.o
                 0x00800101                max_cycle_L
  .data.freq_low
-                0x00800102        0x1 main.o
+                0x00800102        0x1 Sound.o
                 0x00800102                freq_low
  .data.freq_high
-                0x00800103        0x1 main.o
+                0x00800103        0x1 Sound.o
                 0x00800103                freq_high
  *(.gnu.linkonce.d*)
  *(.rodata)
@@ -486,18 +484,18 @@ END GROUP
  *(.bss)
  *(.bss*)
  .bss.cycle_level
-                0x00800104        0x1 main.o
+                0x00800104        0x1 Sound.o
                 0x00800104                cycle_level
  .bss.cycle_count_H
-                0x00800105        0x1 main.o
+                0x00800105        0x1 Sound.o
                 0x00800105                cycle_count_H
  .bss.cycle_count_L
-                0x00800106        0x1 main.o
+                0x00800106        0x1 Sound.o
                 0x00800106                cycle_count_L
  *(COMMON)
                 0x00800107                PROVIDE (__bss_end, .)
-                0x0000021e                __data_load_start = LOADADDR (.data)
-                0x00000222                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000001d6                __data_load_start = LOADADDR (.data)
+                0x000001da                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800107        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -548,6 +546,7 @@ END GROUP
  .comment       0x00000000       0x30 Input.o
                                  0x31 (size before relaxing)
  .comment       0x00000030       0x31 main.o
+ .comment       0x00000030       0x31 Sound.o
 
 .note.gnu.avr.deviceinfo
                 0x00000000       0x40
@@ -569,55 +568,63 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x70
+.debug_aranges  0x00000000       0x90
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x20 Assembler1.o
+                0x00000000       0x20 Input.o
  .debug_aranges
-                0x00000020       0x20 Input.o
+                0x00000020       0x20 main.o
  .debug_aranges
-                0x00000040       0x30 main.o
+                0x00000040       0x30 Sound.o
+ .debug_aranges
+                0x00000070       0x20 Sound_int.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xbc0
+.debug_info     0x00000000      0xc77
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x8ea C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
- .debug_info    0x000008ea       0x73 Assembler1.o
- .debug_info    0x0000095d       0x82 Input.o
- .debug_info    0x000009df      0x1e1 main.o
+ .debug_info    0x000008ea       0x82 Input.o
+ .debug_info    0x0000096c       0xb3 main.o
+ .debug_info    0x00000a1f      0x1e0 Sound.o
+ .debug_info    0x00000bff       0x78 Sound_int.o
 
-.debug_abbrev   0x00000000      0x98f
+.debug_abbrev   0x00000000      0xa22
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x86e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
- .debug_abbrev  0x0000086e       0x14 Assembler1.o
- .debug_abbrev  0x00000882       0x4f Input.o
- .debug_abbrev  0x000008d1       0xbe main.o
+ .debug_abbrev  0x0000086e       0x4f Input.o
+ .debug_abbrev  0x000008bd       0x75 main.o
+ .debug_abbrev  0x00000932       0xdc Sound.o
+ .debug_abbrev  0x00000a0e       0x14 Sound_int.o
 
-.debug_line     0x00000000      0x543
+.debug_line     0x00000000      0x59c
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1a6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
- .debug_line    0x000001a6      0x1b9 Assembler1.o
- .debug_line    0x0000035f       0xa8 Input.o
- .debug_line    0x00000407      0x13c main.o
+ .debug_line    0x000001a6       0xa8 Input.o
+ .debug_line    0x0000024e       0xce main.o
+ .debug_line    0x0000031c      0x15e Sound.o
+ .debug_line    0x0000047a      0x122 Sound_int.o
 
-.debug_frame    0x00000000       0xd0
+.debug_frame    0x00000000       0xf4
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 Input.o
- .debug_frame   0x00000024       0xac main.o
+ .debug_frame   0x00000024       0x24 main.o
+ .debug_frame   0x00000048       0xac Sound.o
 
-.debug_str      0x00000000      0x50d
+.debug_str      0x00000000      0x529
  *(.debug_str)
  .debug_str     0x00000000      0x318 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
- .debug_str     0x00000318      0x139 Input.o
-                                0x16d (size before relaxing)
- .debug_str     0x00000451       0xbc main.o
-                                0x227 (size before relaxing)
+ .debug_str     0x00000318      0x13f Input.o
+                                0x173 (size before relaxing)
+ .debug_str     0x00000457       0x11 main.o
+                                0x17c (size before relaxing)
+ .debug_str     0x00000468       0xc1 Sound.o
+                                0x226 (size before relaxing)
 
-.debug_loc      0x00000000      0x1d0
+.debug_loc      0x00000000      0x1ca
  *(.debug_loc)
- .debug_loc     0x00000000      0x1d0 main.o
+ .debug_loc     0x00000000      0x1ca Sound.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -637,10 +644,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x30
+.debug_ranges   0x00000000       0x40
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x10 Input.o
- .debug_ranges  0x00000010       0x20 main.o
+ .debug_ranges  0x00000010       0x10 main.o
+ .debug_ranges  0x00000020       0x20 Sound.o
 
 .debug_macro
  *(.debug_macro)

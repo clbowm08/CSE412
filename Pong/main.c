@@ -19,7 +19,7 @@
 
 #define F_CPU 16000000UL
 
-void TIM1_COMPA();
+/*void TIM1_COMPA();
 void SET_SPEAKER_PARAMS();
 
 char cycle = 0;
@@ -47,7 +47,7 @@ void Play_speaker(int freq, int len_ms){
 
 ISR(TIMER1_COMPA_vect){
 	TIM1_COMPA();
-}
+}*/
 int main(void)
 {
 	cli();
