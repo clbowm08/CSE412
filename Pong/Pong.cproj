@@ -146,9 +146,6 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assembler1.s">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="Input.c">
       <SubType>compile</SubType>
     </Compile>
