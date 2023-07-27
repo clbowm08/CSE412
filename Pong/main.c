@@ -16,22 +16,18 @@ int main(void)
 	struct Player player[2];
 	InitInputs(player);
 	InitLCD();
-	SendCommand(0x08);
+	SendCommand(0x3C);
     while (1)
     {
 	    PollInputs(player);
 	    CheckInputs(player);
-
-	    // Clear the display before writing the string
-	    SendCommand(0x08);
-		if (TWSR0 == 0x68)
-		{
-			PORTB = (1 << PORTB5);
-		}
-		else
-		{
-			PORTB = (0 << PORTB5);
-		}
+        //// Write a string to the LCD
+        //char myString[] = "Hello, LCD!";
+        //for (int i = 0; myString[i] != '\0'; i++)
+        //{
+	        //SendData(myString[i]);
+	        //_delay_ms(100);
+	    //}
 	}
 }
 
