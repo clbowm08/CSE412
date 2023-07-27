@@ -113,6 +113,7 @@ void CheckInputs(struct Player *player)
 	if (lightOn)
 	{
 		PORTB = (1 << PORTB5);
+		SendData('O');
 	}
 	else
 	{

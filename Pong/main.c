@@ -11,12 +11,11 @@
 #include "LCD.h"
 
 int main(void)
-{
+{	
 	cli();
 	struct Player player[2];
 	InitInputs(player);
 	InitLCD();
-	SendCommand(0x3C);
     while (1)
     {
 	    PollInputs(player);

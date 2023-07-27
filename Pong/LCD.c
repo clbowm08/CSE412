@@ -3,6 +3,9 @@
 
 #include "LCD.h"
 #include <util/delay.h>
+#define ADDRESS 0x27
+#define BACKLIGHT_VALUE 0x08
+#define ENABLE 4
 
 void InitLCD()
 {	
@@ -11,11 +14,6 @@ void InitLCD()
 	
 	PORTC |= (1 << LCD_SDA_PORT);
 	PORTC |= (1 << LCD_SCL_PORT);
-	
-    uint32_t desired_bit_rate = 9600UL; // 100 kHz
-
-    // CPU clock frequency (assuming it's running at 16 MHz)
-    uint32_t cpu_clock = 16000000UL;
 
     // Calculate the closest TWBR value based on the desired bit rate and prescaler
     // The closest prescaler for 100 kHz is 16, so we'll use that
@@ -26,74 +24,90 @@ void InitLCD()
 
     // Enable TWI
     TWCR0 = (1 << TWEN);
-
-    // Initialization sequence for I2C LCD2004
-    SendCommand(0x32); // Initialization for 4-bit mode
-    SendCommand(0x33); // Initialization for 4-bit mode
-
-    // Function Set: 4-bit data length, 2-line display, 5x8 dots font
-    SendCommand(0x2C);
-
-    // Display ON/OFF Control: Display ON, Cursor OFF, Blinking OFF
-    SendCommand(0x0F);
-
-    // Clear Display
-    SendCommand(0x01);
-    _delay_ms(2); // Wait for >1.64ms
-
-    // Entry Mode Set: Increment cursor, No display shift
-    SendCommand(0x06);
-
-    _delay_ms(50); // Wait for initialization to complete
-}
-
-void SendCommand(unsigned int command)
-{
-    // Start condition
-	TWCR0 = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);	while (!(TWCR0 & (1 << TWINT)));
-
-    // Send I2C address with write bit (R/W = 0)
-    TWDR0 = LCD_I2C_ADDR << 1;
-	TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
-
-	// Send control byte (command indication)
-	TWDR0 = 0x00; // Control byte: Register select (RS=0), R/W=0 (Write mode)
-	TWCR0 = (1 << TWINT) | (1 << TWEN);
-	while (!(TWCR0 & (1 << TWINT)));
-
-    // Send the command
-    TWDR0 = command;
-    TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
-
-    // Generate I2C stop condition
-    TWCR0 = (1 << TWINT) | (1 << TWSTO) | (1 << TWEN);
-    _delay_us(100); // Wait for the stop condition to complete
-}
-
-void SendData(unsigned short data)
-{
-    // Start condition
-    TWCR0 = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
 	
-	// Send control byte (data indication)
-	TWDR0 = 0x40; // Control byte: Register select (RS=1), R/W=0 (Write mode)
+	ExpanderWrite(BACKLIGHT_VALUE);
+
+	Write4Bits(0x03 >> 4); // Initialization for 4-bit mode (First time)
+	_delay_us(4500);      // Wait for 5ms
+
+	Write4Bits(0x30 >> 4); // Initialization for 4-bit mode (First time)
+	_delay_us(4500);      // Wait for 5ms
+
+	Write4Bits(0x30 >> 4); // Initialization for 4-bit mode (Third time)
+	_delay_us(150);    // Wait for 150us
+
+	Write4Bits(0x20 >> 4); // Initialization for 4-bit mode (Final time, sets 4-bit mode)
+	
+	SendCommand(0x38);	//Two line make cursor
+	SendCommand(0x34);	//Two Line no cursor
+	SendCommand(0x08);		//4 line, with cursor
+	SendCommand(0x0F);
+	SendCommand(0x02);
+	SendCommand(0x06);
+	SendCommand(0x14);
+	SendData(0x41);
+}
+
+void SendCommand(uint8_t command)
+{
+	Write4Bits(command & 0xF0);
+	Write4Bits((command << 4) & 0xF0);
+}
+
+void Write4Bits(uint8_t value)
+{
+	ExpanderWrite(value);
+	PulseEnable(value);
+}
+
+void ExpanderWrite(uint8_t value)
+{
+	BeginTransmisson(ADDRESS);
+	
+	// Send the data
+	TWDR0 = (value | BACKLIGHT_VALUE);
 	TWCR0 = (1 << TWINT) | (1 << TWEN);
 	while (!(TWCR0 & (1 << TWINT)));
+	
+	EndTransmisson();
+}
 
-    // Send I2C address with write bit (R/W = 0)
-    TWDR0 = LCD_I2C_ADDR << 1;
-    TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
+void BeginTransmisson(uint8_t address)
+{
+	// Start condition
+	TWCR0 = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
+	while (!(TWCR0 & (1 << TWINT)));
 
-    // Send the data
-    TWDR0 = data;
-    TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
+	// Send I2C address with write bit (R/W = 0)
+	TWDR0 = LCD_I2C_ADDR << 1;
+	TWCR0 = (1 << TWINT) | (1 << TWEN);
+	while (!(TWCR0 & (1 << TWINT)));
+}
 
-    // Generate I2C stop condition
-    TWCR0 = (1 << TWINT) | (1 << TWSTO) | (1 << TWEN);
-    _delay_us(100); // Wait for the stop condition to complete
+void EndTransmisson()
+{
+	    // Generate I2C stop condition
+	    TWCR0 = (1 << TWINT) | (1 << TWSTO) | (1 << TWEN);
+	    _delay_us(100); // Wait for the stop condition to complete
+}
+
+void PulseEnable(uint8_t value)
+{
+	ExpanderWrite(value | ENABLE);
+	_delay_us(1);
+	
+	ExpanderWrite(value & ~ENABLE);
+	_delay_us(50);
+}
+
+void DisplayCursor(uint8_t* displayControl)
+{
+	*displayControl |= 0x02;
+	SendCommand(*displayControl | 0x08);
+}
+
+void SendData(uint8_t value)
+{
+	Write4Bits((value & 0xF0) | 0x01);
+	Write4Bits(((value << 4) & 0xF0) | 0x01);
 }

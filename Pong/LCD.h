@@ -15,10 +15,22 @@
 
 void InitLCD();
 
-void SendCommand(unsigned int command);
+void Write4Bits(uint8_t value);
 
-void SendData(unsigned short data);
+void ExpanderWrite(uint8_t value);
 
+void BeginTransmisson(uint8_t address);
 
+void WriteData(uint8_t data);
+
+void EndTransmisson();
+
+void PulseEnable(uint8_t value);
+
+void SendCommand(uint8_t command);
+
+void DisplayCursor(uint8_t* displayControl);
+
+void SendData(uint8_t value);
 
 #endif /* LCD_H_ */
