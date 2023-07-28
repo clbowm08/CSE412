@@ -73,6 +73,7 @@ void PollInputs(struct Player *player)
 
 void CheckInputs(struct Player *player)
 {
+
 	//checking for double inputs
 	if ((player[0].downFlag == true) && (player[0].upFlag == true))
 	{
@@ -137,7 +138,7 @@ void CheckInputs(struct Player *player)
 void ExecuteInputs(struct Player *player)
 {
 	if (player[0].upFlag)
-	{
+	{	
 		player[0].yPos -= 1;
 	}
 	if (player[0].downFlag)

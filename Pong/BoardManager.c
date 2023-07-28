@@ -26,6 +26,7 @@ void ResetBoard(struct Player *player)
 void UpdateBoard(struct Player *player)
 {
 	SendCommand(0x01);
+	_delay_ms(3);
 	SendCommand(0x02);
 	SetCursorPosition(player[0].xPos, player[0].yPos);
 	SendData(0x7C);
