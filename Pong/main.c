@@ -13,6 +13,7 @@
 
 int main(void)
 {	
+	_delay_ms(1000);
 	cli();
 	struct Player player[2];
 	InitInputs(player);

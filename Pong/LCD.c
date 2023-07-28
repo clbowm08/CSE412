@@ -48,7 +48,7 @@ void SendCommand(uint8_t command)
 {
 	Write4Bits(command & 0xF0);
 	Write4Bits((command << 4) & 0xF0);
-	_delay_ms(1);
+	_delay_ms(2);
 }
 
 void Write4Bits(uint8_t value)
@@ -107,7 +107,7 @@ void SendData(uint8_t value)
 {
 	Write4Bits((value & 0xF0) | 0x01);
 	Write4Bits(((value << 4) & 0xF0) | 0x01);
-	_delay_ms(1);
+	_delay_ms(2);
 }
 
 void SetCursorPosition(uint8_t xCoord, uint8_t yCoord)

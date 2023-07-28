@@ -464,23 +464,23 @@ void CheckInputs(struct Player *player)
 	}
 	
 	//Checking down flag boundaries
-	if ((player[0].downFlag == true) && (player[0].yPos >= 4))
+	if ((player[0].downFlag == true) && (player[0].yPos >= 3))
  272:	81 81       	ldd	r24, Z+1	; 0x01
  274:	88 23       	and	r24, r24
  276:	21 f0       	breq	.+8      	; 0x280 <CheckInputs+0x4c>
  278:	83 81       	ldd	r24, Z+3	; 0x03
- 27a:	84 30       	cpi	r24, 0x04	; 4
+ 27a:	83 30       	cpi	r24, 0x03	; 3
  27c:	08 f0       	brcs	.+2      	; 0x280 <CheckInputs+0x4c>
 	{
 		player[0].downFlag = false;
  27e:	11 82       	std	Z+1, r1	; 0x01
 	}
-	if ((player[1].downFlag == true) && (player[1].yPos >= 4))
+	if ((player[1].downFlag == true) && (player[1].yPos >= 3))
  280:	85 81       	ldd	r24, Z+5	; 0x05
  282:	88 23       	and	r24, r24
  284:	21 f0       	breq	.+8      	; 0x28e <CheckInputs+0x5a>
  286:	87 81       	ldd	r24, Z+7	; 0x07
- 288:	84 30       	cpi	r24, 0x04	; 4
+ 288:	83 30       	cpi	r24, 0x03	; 3
  28a:	08 f0       	brcs	.+2      	; 0x28e <CheckInputs+0x5a>
 	{
 		player[1].downFlag = false;
@@ -623,8 +623,8 @@ void DisplayCursor(uint8_t* displayControl)
  36a:	82 95       	swap	r24
  36c:	80 7f       	andi	r24, 0xF0	; 240
  36e:	0e 94 a6 01 	call	0x34c	; 0x34c <Write4Bits>
- 372:	8f e9       	ldi	r24, 0x9F	; 159
- 374:	9f e0       	ldi	r25, 0x0F	; 15
+ 372:	8f e3       	ldi	r24, 0x3F	; 63
+ 374:	9f e1       	ldi	r25, 0x1F	; 31
  376:	01 97       	sbiw	r24, 0x01	; 1
  378:	f1 f7       	brne	.-4      	; 0x376 <SendCommand+0x18>
  37a:	00 c0       	rjmp	.+0      	; 0x37c <SendCommand+0x1e>
@@ -708,13 +708,13 @@ void SendData(uint8_t value)
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 416:	8f e9       	ldi	r24, 0x9F	; 159
- 418:	9f e0       	ldi	r25, 0x0F	; 15
+ 416:	8f e3       	ldi	r24, 0x3F	; 63
+ 418:	9f e1       	ldi	r25, 0x1F	; 31
  41a:	01 97       	sbiw	r24, 0x01	; 1
  41c:	f1 f7       	brne	.-4      	; 0x41a <__EEPROM_REGION_LENGTH__+0x1a>
  41e:	00 c0       	rjmp	.+0      	; 0x420 <__EEPROM_REGION_LENGTH__+0x20>
  420:	00 00       	nop
-	_delay_ms(1);
+	_delay_ms(2);
 }
  422:	cf 91       	pop	r28
  424:	08 95       	ret
