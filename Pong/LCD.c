@@ -6,8 +6,10 @@
 #define ADDRESS 0x27
 #define BACKLIGHT_VALUE 0x08
 #define ENABLE 4
-#define DDRAM_PRESCALER 0x80
-
+char ball[8] = {0b00000,0b01110,0b11111,0b11111,0b11111,0b01110,0b00000,0b00000};
+char left_wall[8]={0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10};
+char right_wall[8]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01};
+	
 void InitLCD()
 {	
 	DDRC |= (0 << DDRC4);
@@ -39,16 +41,38 @@ void InitLCD()
 
 	Write4Bits(0x20 >> 4); // Initialization for 4-bit mode (Final time, sets 4-bit mode)
 	
-	SendCommand(0x28);
+	SendCommand(0x38);	//Two line make cursor
+	SendCommand(0x34);	//Two Line no cursor
+	SendCommand(0x08);		//4 line, with cursor
 	SendCommand(0x0F);
+	SendCommand(0x02);
+	SendCommand(0x06);
+	SendCommand(0x14);
+	CreateCustomChar(0x01,ball);
+	CreateCustomChar(0x02,left_wall);
+	CreateCustomChar(0x03,right_wall);
 	SendCommand(0x01);
+	
+	//SendData('H');
+	//SendData('E');
+	//SendData('L');
+	//SendData('L');
+	//SendData('O');
+	
+	//SendData(0x01);
+	//SendData(0x02);
+	//SendData(0x03);
+	//SendCommand(0x02);
+	//SendData(0x01);
+	//SendData(0x01);
+	
 }
 
 void SendCommand(uint8_t command)
 {
 	Write4Bits(command & 0xF0);
 	Write4Bits((command << 4) & 0xF0);
-	_delay_ms(2);
+	_delay_ms(50);
 }
 
 void Write4Bits(uint8_t value)
@@ -107,36 +131,12 @@ void SendData(uint8_t value)
 {
 	Write4Bits((value & 0xF0) | 0x01);
 	Write4Bits(((value << 4) & 0xF0) | 0x01);
-	_delay_ms(2);
+	_delay_ms(50);
 }
 
-void SetCursorPosition(uint8_t xCoord, uint8_t yCoord)
-{
-	SendCommand(0x02);
-	uint8_t createdAddress = 0;
-	
-	switch (yCoord)
-	{
-		case 2:
-		yCoord = 3;
-		break;
-		case 3:
-		yCoord = 2;
-		break;
-		default:
-		break;
+void CreateCustomChar(uint8_t location, uint8_t charmap[]){
+	for(int i=0; i<8; i++){
+		SendCommand(0x40|((location&0x07)<<3)+i);
+		SendData(charmap[i]);
 	}
-
-	for (int i = yCoord; i > 1; i--)
-	{
-		createdAddress += 20;
-	}
-	createdAddress += xCoord;
-	for (int i = 0; i <= createdAddress; i++)
-	{
-		SendCommand(0x14);
-	}
-	//createdAddress += xCoord;
-	//
-	//SendCommand(createdAddress | DDRAM_PRESCALER);
 }
