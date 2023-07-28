@@ -11,13 +11,7 @@
 #include <avr/io.h>
 
 void InitInputs(struct Player *player)
-{
-	//Initializing Player Struct
-	player[0].downFlag = false;
-	player[0].upFlag = false;
-	player[1].downFlag = false;
-	player[1].upFlag = false;
-	
+{	
 	//Initializing data direction register for button ports to be Inputs
 	DDRC |= (0 << DDRC3);
 	DDRC |= (0 << DDRC2);
@@ -79,44 +73,83 @@ void PollInputs(struct Player *player)
 
 void CheckInputs(struct Player *player)
 {
+	//checking for double inputs
 	if ((player[0].downFlag == true) && (player[0].upFlag == true))
 	{
 		player[0].downFlag = false;
 		player[0].upFlag = false;
 	}
-	
 	if ((player[1].downFlag == true) && (player[1].upFlag == true))
 	{
 		player[1].downFlag = false;
 		player[1].upFlag = false;
 	}
 	
-	//Temp tings
-	bool lightOn = false;
-	if (player[0].downFlag == true)
+	//Checking up flag boundaries
+	if ((player[0].upFlag == true) && (player[0].yPos <= 1))
 	{
-		lightOn = true;
+		player[0].upFlag = false;
 	}
-	if (player[0].upFlag == true)
+	if ((player[1].upFlag == true) && (player[1].yPos <= 1))
 	{
-		lightOn = true;
-	}
-	if (player[1].downFlag == true)
-	{
-		lightOn = true;
-	}
-	if (player[1].upFlag == true)
-	{
-		lightOn = true;
+		player[1].upFlag = false;
 	}
 	
-	if (lightOn)
+	//Checking down flag boundaries
+	if ((player[0].downFlag == true) && (player[0].yPos >= 3))
 	{
-		PORTB = (1 << PORTB5);
-		SendData('O');
+		player[0].downFlag = false;
 	}
-	else
+	if ((player[1].downFlag == true) && (player[1].yPos >= 3))
 	{
-		PORTB = (0 << PORTB5);
+		player[1].downFlag = false;
+	}
+	
+	////Temp tings
+	//bool lightOn = false;
+	//if (player[0].downFlag == true)
+	//{
+		//lightOn = true;
+	//}
+	//if (player[0].upFlag == true)
+	//{
+		//lightOn = true;
+	//}
+	//if (player[1].downFlag == true)
+	//{
+		//lightOn = true;
+	//}
+	//if (player[1].upFlag == true)
+	//{
+		//lightOn = true;
+	//}
+	//
+	//if (lightOn)
+	//{
+		//PORTB = (1 << PORTB5);
+	//}
+	//else
+	//{
+		//PORTB = (0 << PORTB5);
+	//}
+}
+
+void ExecuteInputs(struct Player *player)
+{
+	if (player[0].upFlag)
+	{
+		player[0].yPos -= 1;
+	}
+	if (player[0].downFlag)
+	{
+		player[0].yPos += 1;
+	}
+	if (player[1].upFlag)
+	{
+		player[1].yPos -= 1;
+	}
+	if (player[1].downFlag)
+	{
+		player[1].yPos += 1;
 	}
 }

@@ -20,6 +20,8 @@ typedef struct Player
 {
 	bool upFlag;
 	bool downFlag;
+	unsigned char xPos;
+	unsigned char yPos;
 }Player_t;
 
 void InitInputs(struct Player *player);
@@ -27,6 +29,8 @@ void InitInputs(struct Player *player);
 void PollInputs(struct Player *player);
 
 void CheckInputs(struct Player *player);
+
+void ExecuteInputs(struct Player *player);
 
 
 #endif /* INPUT_H_ */

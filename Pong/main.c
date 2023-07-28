@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 #include "Input.h"
 #include "LCD.h"
+#include "BoardManager.h"
 
 int main(void)
 {	
@@ -16,17 +17,14 @@ int main(void)
 	struct Player player[2];
 	InitInputs(player);
 	InitLCD();
+	ResetBoard(player);
     while (1)
     {
 	    PollInputs(player);
 	    CheckInputs(player);
-        //// Write a string to the LCD
-        //char myString[] = "Hello, LCD!";
-        //for (int i = 0; myString[i] != '\0'; i++)
-        //{
-	        //SendData(myString[i]);
-	        //_delay_ms(100);
-	    //}
+		ExecuteInputs(player);
+		UpdateBoard(player);
+		_delay_ms(100);
 	}
 }
 

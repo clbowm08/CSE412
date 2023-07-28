@@ -33,4 +33,6 @@ void DisplayCursor(uint8_t* displayControl);
 
 void SendData(uint8_t value);
 
+void SetCursorPosition(uint8_t xCoord, uint8_t yCoord);
+
 #endif /* LCD_H_ */

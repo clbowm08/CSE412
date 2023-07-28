@@ -6,6 +6,7 @@
 #define ADDRESS 0x27
 #define BACKLIGHT_VALUE 0x08
 #define ENABLE 4
+#define DDRAM_PRESCALER 0x80
 
 void InitLCD()
 {	
@@ -38,20 +39,16 @@ void InitLCD()
 
 	Write4Bits(0x20 >> 4); // Initialization for 4-bit mode (Final time, sets 4-bit mode)
 	
-	SendCommand(0x38);	//Two line make cursor
-	SendCommand(0x34);	//Two Line no cursor
-	SendCommand(0x08);		//4 line, with cursor
+	SendCommand(0x28);
 	SendCommand(0x0F);
-	SendCommand(0x02);
-	SendCommand(0x06);
-	SendCommand(0x14);
-	SendData(0x41);
+	SendCommand(0x01);
 }
 
 void SendCommand(uint8_t command)
 {
 	Write4Bits(command & 0xF0);
 	Write4Bits((command << 4) & 0xF0);
+	_delay_ms(1);
 }
 
 void Write4Bits(uint8_t value)
@@ -110,4 +107,36 @@ void SendData(uint8_t value)
 {
 	Write4Bits((value & 0xF0) | 0x01);
 	Write4Bits(((value << 4) & 0xF0) | 0x01);
+	_delay_ms(1);
+}
+
+void SetCursorPosition(uint8_t xCoord, uint8_t yCoord)
+{
+	SendCommand(0x02);
+	uint8_t createdAddress = 0;
+	
+	switch (yCoord)
+	{
+		case 2:
+		yCoord = 3;
+		break;
+		case 3:
+		yCoord = 2;
+		break;
+		default:
+		break;
+	}
+
+	for (int i = yCoord; i > 1; i--)
+	{
+		createdAddress += 20;
+	}
+	createdAddress += xCoord;
+	for (int i = 0; i <= createdAddress; i++)
+	{
+		SendCommand(0x14);
+	}
+	//createdAddress += xCoord;
+	//
+	//SendCommand(createdAddress | DDRAM_PRESCALER);
 }
