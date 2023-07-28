@@ -6,7 +6,10 @@
 #define ADDRESS 0x27
 #define BACKLIGHT_VALUE 0x08
 #define ENABLE 4
-
+char ball[8] = {0b00000,0b01110,0b11111,0b11111,0b11111,0b01110,0b00000,0b00000};
+char left_wall[8]={0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10};
+char right_wall[8]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01};
+	
 void InitLCD()
 {	
 	DDRC |= (0 << DDRC4);
@@ -45,13 +48,31 @@ void InitLCD()
 	SendCommand(0x02);
 	SendCommand(0x06);
 	SendCommand(0x14);
-	SendData(0x41);
+	CreateCustomChar(0x01,ball);
+	CreateCustomChar(0x02,left_wall);
+	CreateCustomChar(0x03,right_wall);
+	SendCommand(0x01);
+	
+	//SendData('H');
+	//SendData('E');
+	//SendData('L');
+	//SendData('L');
+	//SendData('O');
+	
+	//SendData(0x01);
+	//SendData(0x02);
+	//SendData(0x03);
+	//SendCommand(0x02);
+	//SendData(0x01);
+	//SendData(0x01);
+	
 }
 
 void SendCommand(uint8_t command)
 {
 	Write4Bits(command & 0xF0);
 	Write4Bits((command << 4) & 0xF0);
+	_delay_ms(50);
 }
 
 void Write4Bits(uint8_t value)
@@ -110,4 +131,12 @@ void SendData(uint8_t value)
 {
 	Write4Bits((value & 0xF0) | 0x01);
 	Write4Bits(((value << 4) & 0xF0) | 0x01);
+	_delay_ms(50);
+}
+
+void CreateCustomChar(uint8_t location, uint8_t charmap[]){
+	for(int i=0; i<8; i++){
+		SendCommand(0x40|((location&0x07)<<3)+i);
+		SendData(charmap[i]);
+	}
 }
