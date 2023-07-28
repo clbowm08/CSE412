@@ -3,31 +3,31 @@ Pong.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000004  00800100  00000530  000005c4  2**0
+  0 .data         00000004  00800100  00000542  000005d6  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000530  00000000  00000000  00000094  2**1
+  1 .text         00000542  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000003  00800104  00800104  000005c8  2**0
+  2 .bss          00000003  00800104  00800104  000005da  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000005c8  2**0
+  3 .comment      00000030  00000000  00000000  000005da  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000005f8  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000060c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000138  00000000  00000000  00000638  2**3
+  5 .debug_aranges 00000138  00000000  00000000  00000650  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001770  00000000  00000000  00000770  2**0
+  6 .debug_info   000017a9  00000000  00000000  00000788  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000e3f  00000000  00000000  00001ee0  2**0
+  7 .debug_abbrev 00000e51  00000000  00000000  00001f31  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000ce5  00000000  00000000  00002d1f  2**0
+  8 .debug_line   00000cf1  00000000  00000000  00002d82  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000260  00000000  00000000  00003a04  2**2
+  9 .debug_frame  00000260  00000000  00000000  00003a74  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000714  00000000  00000000  00003c64  2**0
+ 10 .debug_str    00000714  00000000  00000000  00003cd4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000008bf  00000000  00000000  00004378  2**0
+ 11 .debug_loc    00000907  00000000  00000000  000043e8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000e0  00000000  00000000  00004c37  2**0
+ 12 .debug_ranges 000000e0  00000000  00000000  00004cef  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -44,7 +44,7 @@ Disassembly of section .text:
   20:	0c 94 77 00 	jmp	0xee	; 0xee <__bad_interrupt>
   24:	0c 94 77 00 	jmp	0xee	; 0xee <__bad_interrupt>
   28:	0c 94 77 00 	jmp	0xee	; 0xee <__bad_interrupt>
-  2c:	0c 94 72 02 	jmp	0x4e4	; 0x4e4 <__vector_11>
+  2c:	0c 94 7b 02 	jmp	0x4f6	; 0x4f6 <__vector_11>
   30:	0c 94 77 00 	jmp	0xee	; 0xee <__bad_interrupt>
   34:	0c 94 77 00 	jmp	0xee	; 0xee <__bad_interrupt>
   38:	0c 94 77 00 	jmp	0xee	; 0xee <__bad_interrupt>
@@ -91,7 +91,7 @@ Disassembly of section .text:
   c0:	11 e0       	ldi	r17, 0x01	; 1
   c2:	a0 e0       	ldi	r26, 0x00	; 0
   c4:	b1 e0       	ldi	r27, 0x01	; 1
-  c6:	e0 e3       	ldi	r30, 0x30	; 48
+  c6:	e2 e4       	ldi	r30, 0x42	; 66
   c8:	f5 e0       	ldi	r31, 0x05	; 5
   ca:	02 c0       	rjmp	.+4      	; 0xd0 <__do_copy_data+0x10>
   cc:	05 90       	lpm	r0, Z+
@@ -114,7 +114,7 @@ Disassembly of section .text:
   e2:	b2 07       	cpc	r27, r18
   e4:	e1 f7       	brne	.-8      	; 0xde <.do_clear_bss_loop>
   e6:	0e 94 43 02 	call	0x486	; 0x486 <main>
-  ea:	0c 94 96 02 	jmp	0x52c	; 0x52c <_exit>
+  ea:	0c 94 9f 02 	jmp	0x53e	; 0x53e <_exit>
 
 000000ee <__bad_interrupt>:
   ee:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -257,130 +257,247 @@ void UpdateBoard(struct Player *player)
  1da:	08 95       	ret
 
 000001dc <InitInputs>:
+#include <avr/io.h>
+
+void InitInputs(struct Player *player)
+{	
+	//Initializing data direction register for button ports to be Inputs
+	DDRC |= (0 << DDRC3);
  1dc:	87 b1       	in	r24, 0x07	; 7
  1de:	87 b9       	out	0x07, r24	; 7
+	DDRC |= (0 << DDRC2);
  1e0:	87 b1       	in	r24, 0x07	; 7
  1e2:	87 b9       	out	0x07, r24	; 7
+	DDRC |= (0 << DDRC1);
  1e4:	87 b1       	in	r24, 0x07	; 7
  1e6:	87 b9       	out	0x07, r24	; 7
+	DDRC |= (0 << DDRC0);
  1e8:	87 b1       	in	r24, 0x07	; 7
  1ea:	87 b9       	out	0x07, r24	; 7
+	
+	//Initializing ports of buttons to produce a signal enabling ()
+	PORTC |= (1 << PORTC3);
  1ec:	88 b1       	in	r24, 0x08	; 8
  1ee:	88 60       	ori	r24, 0x08	; 8
  1f0:	88 b9       	out	0x08, r24	; 8
+	PORTC |= (1 << PORTC2);
  1f2:	88 b1       	in	r24, 0x08	; 8
  1f4:	84 60       	ori	r24, 0x04	; 4
  1f6:	88 b9       	out	0x08, r24	; 8
+	PORTC |= (1 << PORTC1);
  1f8:	88 b1       	in	r24, 0x08	; 8
  1fa:	82 60       	ori	r24, 0x02	; 2
  1fc:	88 b9       	out	0x08, r24	; 8
+	PORTC |= (1 << PORTC0);
  1fe:	88 b1       	in	r24, 0x08	; 8
  200:	81 60       	ori	r24, 0x01	; 1
  202:	88 b9       	out	0x08, r24	; 8
+	
+	//Initializing LED output (CAN BE DELETED AFTER DEBUG PHASE)
+	DDRB |= (1 << DDRB5);
  204:	84 b1       	in	r24, 0x04	; 4
  206:	80 62       	ori	r24, 0x20	; 32
  208:	84 b9       	out	0x04, r24	; 4
  20a:	08 95       	ret
 
 0000020c <PollInputs>:
+}
+
+void PollInputs(struct Player *player)
+{
  20c:	fc 01       	movw	r30, r24
+	//Poll for first button
+	if (!(BUTTON_PORTS & FIRST_BUTTON_PIN_LOCATION))
  20e:	33 99       	sbic	0x06, 3	; 6
  210:	03 c0       	rjmp	.+6      	; 0x218 <PollInputs+0xc>
+	{
+		player[0].downFlag = true;
  212:	81 e0       	ldi	r24, 0x01	; 1
  214:	81 83       	std	Z+1, r24	; 0x01
  216:	01 c0       	rjmp	.+2      	; 0x21a <PollInputs+0xe>
+	}
+	else
+	{
+		player[0].downFlag = false;
  218:	11 82       	std	Z+1, r1	; 0x01
+	}
+	
+	//Poll for second button
+	if (!(BUTTON_PORTS & SECOND_BUTTON_PIN_LOCATION))
  21a:	32 99       	sbic	0x06, 2	; 6
  21c:	03 c0       	rjmp	.+6      	; 0x224 <PollInputs+0x18>
+	{
+		player[0].upFlag = true;
  21e:	81 e0       	ldi	r24, 0x01	; 1
  220:	80 83       	st	Z, r24
  222:	01 c0       	rjmp	.+2      	; 0x226 <PollInputs+0x1a>
+	}
+	else
+	{
+		player[0].upFlag = false;
  224:	10 82       	st	Z, r1
+	}
+	
+	//Poll for third button
+	if (!(BUTTON_PORTS & THIRD_BUTTON_PIN_LOCATION))
  226:	31 99       	sbic	0x06, 1	; 6
  228:	03 c0       	rjmp	.+6      	; 0x230 <PollInputs+0x24>
+	{
+		player[1].downFlag = true;
  22a:	81 e0       	ldi	r24, 0x01	; 1
  22c:	85 83       	std	Z+5, r24	; 0x05
  22e:	01 c0       	rjmp	.+2      	; 0x232 <PollInputs+0x26>
+	}
+	else
+	{
+		player[1].downFlag = false;
  230:	15 82       	std	Z+5, r1	; 0x05
+	}
+	
+	//Poll for fourth button
+	if (!(BUTTON_PORTS & FOURTH_BUTTON_PIN_LOCATION))
  232:	30 99       	sbic	0x06, 0	; 6
  234:	03 c0       	rjmp	.+6      	; 0x23c <PollInputs+0x30>
+	{
+		player[1].upFlag = true;
  236:	81 e0       	ldi	r24, 0x01	; 1
  238:	84 83       	std	Z+4, r24	; 0x04
  23a:	08 95       	ret
+	}
+	else
+	{
+		player[1].upFlag = false;
  23c:	14 82       	std	Z+4, r1	; 0x04
  23e:	08 95       	ret
 
 00000240 <CheckInputs>:
+	}
+}
+
+void CheckInputs(struct Player *player)
+{
  240:	fc 01       	movw	r30, r24
+
+	//checking for double inputs
+	if ((player[0].downFlag == true) && (player[0].upFlag == true))
  242:	81 81       	ldd	r24, Z+1	; 0x01
  244:	88 23       	and	r24, r24
  246:	29 f0       	breq	.+10     	; 0x252 <CheckInputs+0x12>
  248:	80 81       	ld	r24, Z
  24a:	88 23       	and	r24, r24
  24c:	11 f0       	breq	.+4      	; 0x252 <CheckInputs+0x12>
+	{
+		player[0].downFlag = false;
  24e:	11 82       	std	Z+1, r1	; 0x01
+		player[0].upFlag = false;
  250:	10 82       	st	Z, r1
+	}
+	if ((player[1].downFlag == true) && (player[1].upFlag == true))
  252:	85 81       	ldd	r24, Z+5	; 0x05
  254:	88 23       	and	r24, r24
  256:	29 f0       	breq	.+10     	; 0x262 <CheckInputs+0x22>
  258:	84 81       	ldd	r24, Z+4	; 0x04
  25a:	88 23       	and	r24, r24
  25c:	11 f0       	breq	.+4      	; 0x262 <CheckInputs+0x22>
+	{
+		player[1].downFlag = false;
  25e:	15 82       	std	Z+5, r1	; 0x05
+		player[1].upFlag = false;
  260:	14 82       	std	Z+4, r1	; 0x04
+	}
+	
+	//Checking up flag boundaries
+	if ((player[0].upFlag == true) && (player[0].yPos <= 1))
  262:	80 81       	ld	r24, Z
  264:	88 23       	and	r24, r24
  266:	21 f0       	breq	.+8      	; 0x270 <CheckInputs+0x30>
  268:	83 81       	ldd	r24, Z+3	; 0x03
  26a:	82 30       	cpi	r24, 0x02	; 2
  26c:	08 f4       	brcc	.+2      	; 0x270 <CheckInputs+0x30>
+	{
+		player[0].upFlag = false;
  26e:	10 82       	st	Z, r1
+	}
+	if ((player[1].upFlag == true) && (player[1].yPos <= 1))
  270:	84 81       	ldd	r24, Z+4	; 0x04
  272:	88 23       	and	r24, r24
  274:	21 f0       	breq	.+8      	; 0x27e <CheckInputs+0x3e>
  276:	87 81       	ldd	r24, Z+7	; 0x07
  278:	82 30       	cpi	r24, 0x02	; 2
  27a:	08 f4       	brcc	.+2      	; 0x27e <CheckInputs+0x3e>
+	{
+		player[1].upFlag = false;
  27c:	14 82       	std	Z+4, r1	; 0x04
+	}
+	
+	//Checking down flag boundaries
+	if ((player[0].downFlag == true) && (player[0].yPos >= 3))
  27e:	81 81       	ldd	r24, Z+1	; 0x01
  280:	88 23       	and	r24, r24
  282:	21 f0       	breq	.+8      	; 0x28c <CheckInputs+0x4c>
  284:	83 81       	ldd	r24, Z+3	; 0x03
- 286:	84 30       	cpi	r24, 0x04	; 4
+ 286:	83 30       	cpi	r24, 0x03	; 3
  288:	08 f0       	brcs	.+2      	; 0x28c <CheckInputs+0x4c>
+	{
+		player[0].downFlag = false;
  28a:	11 82       	std	Z+1, r1	; 0x01
+	}
+	if ((player[1].downFlag == true) && (player[1].yPos >= 3))
  28c:	85 81       	ldd	r24, Z+5	; 0x05
  28e:	88 23       	and	r24, r24
  290:	21 f0       	breq	.+8      	; 0x29a <CheckInputs+0x5a>
  292:	87 81       	ldd	r24, Z+7	; 0x07
- 294:	84 30       	cpi	r24, 0x04	; 4
+ 294:	83 30       	cpi	r24, 0x03	; 3
  296:	08 f0       	brcs	.+2      	; 0x29a <CheckInputs+0x5a>
+	{
+		player[1].downFlag = false;
  298:	15 82       	std	Z+5, r1	; 0x05
  29a:	08 95       	ret
 
 0000029c <ExecuteInputs>:
+		//PORTB = (0 << PORTB5);
+	//}
+}
+
+void ExecuteInputs(struct Player *player)
+{
  29c:	fc 01       	movw	r30, r24
+	if (player[0].upFlag)
  29e:	80 81       	ld	r24, Z
  2a0:	88 23       	and	r24, r24
  2a2:	19 f0       	breq	.+6      	; 0x2aa <ExecuteInputs+0xe>
+	{	
+		player[0].yPos -= 1;
  2a4:	83 81       	ldd	r24, Z+3	; 0x03
  2a6:	81 50       	subi	r24, 0x01	; 1
  2a8:	83 83       	std	Z+3, r24	; 0x03
+	}
+	if (player[0].downFlag)
  2aa:	81 81       	ldd	r24, Z+1	; 0x01
  2ac:	88 23       	and	r24, r24
  2ae:	19 f0       	breq	.+6      	; 0x2b6 <ExecuteInputs+0x1a>
+	{
+		player[0].yPos += 1;
  2b0:	83 81       	ldd	r24, Z+3	; 0x03
  2b2:	8f 5f       	subi	r24, 0xFF	; 255
  2b4:	83 83       	std	Z+3, r24	; 0x03
+	}
+	if (player[1].upFlag)
  2b6:	84 81       	ldd	r24, Z+4	; 0x04
  2b8:	88 23       	and	r24, r24
  2ba:	19 f0       	breq	.+6      	; 0x2c2 <ExecuteInputs+0x26>
+	{
+		player[1].yPos -= 1;
  2bc:	87 81       	ldd	r24, Z+7	; 0x07
  2be:	81 50       	subi	r24, 0x01	; 1
  2c0:	87 83       	std	Z+7, r24	; 0x07
+	}
+	if (player[1].downFlag)
  2c2:	85 81       	ldd	r24, Z+5	; 0x05
  2c4:	88 23       	and	r24, r24
  2c6:	19 f0       	breq	.+6      	; 0x2ce <ExecuteInputs+0x32>
+	{
+		player[1].yPos += 1;
  2c8:	87 81       	ldd	r24, Z+7	; 0x07
  2ca:	8f 5f       	subi	r24, 0xFF	; 255
  2cc:	87 83       	std	Z+7, r24	; 0x07
@@ -686,87 +803,97 @@ int main(void)
  494:	de bf       	out	0x3e, r29	; 62
  496:	0f be       	out	0x3f, r0	; 63
  498:	cd bf       	out	0x3d, r28	; 61
+ 49a:	2f ef       	ldi	r18, 0xFF	; 255
+ 49c:	83 ed       	ldi	r24, 0xD3	; 211
+ 49e:	90 e3       	ldi	r25, 0x30	; 48
+ 4a0:	21 50       	subi	r18, 0x01	; 1
+ 4a2:	80 40       	sbci	r24, 0x00	; 0
+ 4a4:	90 40       	sbci	r25, 0x00	; 0
+ 4a6:	e1 f7       	brne	.-8      	; 0x4a0 <main+0x1a>
+ 4a8:	00 c0       	rjmp	.+0      	; 0x4aa <main+0x24>
+ 4aa:	00 00       	nop
+	_delay_ms(1000);
 	cli();
- 49a:	f8 94       	cli
+ 4ac:	f8 94       	cli
 	struct Player player[2];
 	InitInputs(player);
- 49c:	ce 01       	movw	r24, r28
- 49e:	01 96       	adiw	r24, 0x01	; 1
- 4a0:	0e 94 ee 00 	call	0x1dc	; 0x1dc <InitInputs>
+ 4ae:	ce 01       	movw	r24, r28
+ 4b0:	01 96       	adiw	r24, 0x01	; 1
+ 4b2:	0e 94 ee 00 	call	0x1dc	; 0x1dc <InitInputs>
 	InitLCD();
- 4a4:	0e 94 c7 01 	call	0x38e	; 0x38e <InitLCD>
+ 4b6:	0e 94 c7 01 	call	0x38e	; 0x38e <InitLCD>
 	ResetBoard(player);
- 4a8:	ce 01       	movw	r24, r28
- 4aa:	01 96       	adiw	r24, 0x01	; 1
- 4ac:	0e 94 b2 00 	call	0x164	; 0x164 <ResetBoard>
+ 4ba:	ce 01       	movw	r24, r28
+ 4bc:	01 96       	adiw	r24, 0x01	; 1
+ 4be:	0e 94 b2 00 	call	0x164	; 0x164 <ResetBoard>
     while (1)
     {
 	    PollInputs(player);
- 4b0:	ce 01       	movw	r24, r28
- 4b2:	01 96       	adiw	r24, 0x01	; 1
- 4b4:	0e 94 06 01 	call	0x20c	; 0x20c <PollInputs>
+ 4c2:	ce 01       	movw	r24, r28
+ 4c4:	01 96       	adiw	r24, 0x01	; 1
+ 4c6:	0e 94 06 01 	call	0x20c	; 0x20c <PollInputs>
 	    CheckInputs(player);
- 4b8:	ce 01       	movw	r24, r28
- 4ba:	01 96       	adiw	r24, 0x01	; 1
- 4bc:	0e 94 20 01 	call	0x240	; 0x240 <CheckInputs>
+ 4ca:	ce 01       	movw	r24, r28
+ 4cc:	01 96       	adiw	r24, 0x01	; 1
+ 4ce:	0e 94 20 01 	call	0x240	; 0x240 <CheckInputs>
 		ExecuteInputs(player);
- 4c0:	ce 01       	movw	r24, r28
- 4c2:	01 96       	adiw	r24, 0x01	; 1
- 4c4:	0e 94 4e 01 	call	0x29c	; 0x29c <ExecuteInputs>
+ 4d2:	ce 01       	movw	r24, r28
+ 4d4:	01 96       	adiw	r24, 0x01	; 1
+ 4d6:	0e 94 4e 01 	call	0x29c	; 0x29c <ExecuteInputs>
 		UpdateBoard(player);
- 4c8:	ce 01       	movw	r24, r28
- 4ca:	01 96       	adiw	r24, 0x01	; 1
- 4cc:	0e 94 be 00 	call	0x17c	; 0x17c <UpdateBoard>
- 4d0:	2f ef       	ldi	r18, 0xFF	; 255
- 4d2:	81 ee       	ldi	r24, 0xE1	; 225
- 4d4:	94 e0       	ldi	r25, 0x04	; 4
- 4d6:	21 50       	subi	r18, 0x01	; 1
- 4d8:	80 40       	sbci	r24, 0x00	; 0
- 4da:	90 40       	sbci	r25, 0x00	; 0
- 4dc:	e1 f7       	brne	.-8      	; 0x4d6 <main+0x50>
- 4de:	00 c0       	rjmp	.+0      	; 0x4e0 <main+0x5a>
- 4e0:	00 00       	nop
- 4e2:	e6 cf       	rjmp	.-52     	; 0x4b0 <main+0x2a>
+ 4da:	ce 01       	movw	r24, r28
+ 4dc:	01 96       	adiw	r24, 0x01	; 1
+ 4de:	0e 94 be 00 	call	0x17c	; 0x17c <UpdateBoard>
+ 4e2:	2f ef       	ldi	r18, 0xFF	; 255
+ 4e4:	81 ee       	ldi	r24, 0xE1	; 225
+ 4e6:	94 e0       	ldi	r25, 0x04	; 4
+ 4e8:	21 50       	subi	r18, 0x01	; 1
+ 4ea:	80 40       	sbci	r24, 0x00	; 0
+ 4ec:	90 40       	sbci	r25, 0x00	; 0
+ 4ee:	e1 f7       	brne	.-8      	; 0x4e8 <main+0x62>
+ 4f0:	00 c0       	rjmp	.+0      	; 0x4f2 <main+0x6c>
+ 4f2:	00 00       	nop
+ 4f4:	e6 cf       	rjmp	.-52     	; 0x4c2 <main+0x3c>
 
-000004e4 <__vector_11>:
- 4e4:	1f 92       	push	r1
- 4e6:	0f 92       	push	r0
- 4e8:	0f b6       	in	r0, 0x3f	; 63
- 4ea:	0f 92       	push	r0
- 4ec:	11 24       	eor	r1, r1
- 4ee:	2f 93       	push	r18
- 4f0:	3f 93       	push	r19
- 4f2:	4f 93       	push	r20
- 4f4:	5f 93       	push	r21
- 4f6:	6f 93       	push	r22
- 4f8:	7f 93       	push	r23
- 4fa:	8f 93       	push	r24
- 4fc:	9f 93       	push	r25
- 4fe:	af 93       	push	r26
- 500:	bf 93       	push	r27
- 502:	ef 93       	push	r30
- 504:	ff 93       	push	r31
- 506:	0e 94 79 00 	call	0xf2	; 0xf2 <TIM1_COMPA>
- 50a:	ff 91       	pop	r31
- 50c:	ef 91       	pop	r30
- 50e:	bf 91       	pop	r27
- 510:	af 91       	pop	r26
- 512:	9f 91       	pop	r25
- 514:	8f 91       	pop	r24
- 516:	7f 91       	pop	r23
- 518:	6f 91       	pop	r22
- 51a:	5f 91       	pop	r21
- 51c:	4f 91       	pop	r20
- 51e:	3f 91       	pop	r19
- 520:	2f 91       	pop	r18
- 522:	0f 90       	pop	r0
- 524:	0f be       	out	0x3f, r0	; 63
- 526:	0f 90       	pop	r0
- 528:	1f 90       	pop	r1
- 52a:	18 95       	reti
+000004f6 <__vector_11>:
+ 4f6:	1f 92       	push	r1
+ 4f8:	0f 92       	push	r0
+ 4fa:	0f b6       	in	r0, 0x3f	; 63
+ 4fc:	0f 92       	push	r0
+ 4fe:	11 24       	eor	r1, r1
+ 500:	2f 93       	push	r18
+ 502:	3f 93       	push	r19
+ 504:	4f 93       	push	r20
+ 506:	5f 93       	push	r21
+ 508:	6f 93       	push	r22
+ 50a:	7f 93       	push	r23
+ 50c:	8f 93       	push	r24
+ 50e:	9f 93       	push	r25
+ 510:	af 93       	push	r26
+ 512:	bf 93       	push	r27
+ 514:	ef 93       	push	r30
+ 516:	ff 93       	push	r31
+ 518:	0e 94 79 00 	call	0xf2	; 0xf2 <TIM1_COMPA>
+ 51c:	ff 91       	pop	r31
+ 51e:	ef 91       	pop	r30
+ 520:	bf 91       	pop	r27
+ 522:	af 91       	pop	r26
+ 524:	9f 91       	pop	r25
+ 526:	8f 91       	pop	r24
+ 528:	7f 91       	pop	r23
+ 52a:	6f 91       	pop	r22
+ 52c:	5f 91       	pop	r21
+ 52e:	4f 91       	pop	r20
+ 530:	3f 91       	pop	r19
+ 532:	2f 91       	pop	r18
+ 534:	0f 90       	pop	r0
+ 536:	0f be       	out	0x3f, r0	; 63
+ 538:	0f 90       	pop	r0
+ 53a:	1f 90       	pop	r1
+ 53c:	18 95       	reti
 
-0000052c <_exit>:
- 52c:	f8 94       	cli
+0000053e <_exit>:
+ 53e:	f8 94       	cli
 
-0000052e <__stop_program>:
- 52e:	ff cf       	rjmp	.-2      	; 0x52e <__stop_program>
+00000540 <__stop_program>:
+ 540:	ff cf       	rjmp	.-2      	; 0x540 <__stop_program>
