@@ -22,6 +22,7 @@ typedef struct Player
 	bool downFlag;
 	unsigned char xPos;
 	unsigned char yPos;
+	unsigned char score;
 }Player_t;
 
 void InitInputs(struct Player *player);
