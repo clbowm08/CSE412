@@ -6,9 +6,9 @@
 #define ADDRESS 0x27
 #define BACKLIGHT_VALUE 0x08
 #define ENABLE 4
-#define DDRAM_PRESCALER 
+#define DDRAM_PRESCALER 0x80
 
-char ball[8] = {0b00000,0b01110,0b11111,0b11111,0b11111,0b01110,0b00000,0b00000};
+uint8_t ball[8] = {0b00000,0b01110,0b11111,0b11111,0b11111,0b01110,0b00000,0b00000};
 char left_wall[8]={0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10};
 char right_wall[8]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01};
 
@@ -46,10 +46,13 @@ void InitLCD()
 	
 	SendCommand(0x28);
 	SendCommand(0x0C);
-	CreateCustomChar(0x01,ball);
+	CreateCustomChar(0x04,ball);
 	CreateCustomChar(0x02,left_wall);
 	CreateCustomChar(0x03,right_wall);
 	SendCommand(0x01);
+	SendCommand(0x02);
+	SendCommand(0x06);
+	SendCommand(0x0C);
 }
 
 void SendCommand(uint8_t command)
@@ -118,15 +121,16 @@ void SendData(uint8_t value)
 	_delay_ms(1);
 }
 void CreateCustomChar(uint8_t location, uint8_t charmap[]){
+	
 	for(int i=0; i<8; i++){
 		SendCommand(0x40|((location&0x07)<<3)+i);
-		SendData(charmap[i]);
+		SendData(charmap[i]&0b00011111);
 	}
 }
 
 void SetCursorPosition(uint8_t xCoord, uint8_t yCoord)
 {
-	SendCommand(0x02);
+	/*SendCommand(0x02);
 	uint8_t createdAddress = 0;
 	
 	switch (yCoord)
@@ -149,7 +153,24 @@ void SetCursorPosition(uint8_t xCoord, uint8_t yCoord)
 	for (int i = 0; i <= createdAddress; i++)
 	{
 		SendCommand(0x14);
+	}*/
+	uint8_t coordset = xCoord-1;
+	switch(yCoord){
+		case 1:
+		coordset +=0;
+		break;
+		case 2:
+		coordset +=0x40;
+		break;
+		case 3:
+		coordset +=0x14;
+		break;
+		case 4:
+		coordset +=0x54;
+		break;
 	}
+	SendCommand(coordset | DDRAM_PRESCALER);
+
 	//createdAddress += xCoord;
 	//
 	//SendCommand(createdAddress | DDRAM_PRESCALER);

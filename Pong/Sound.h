@@ -10,7 +10,9 @@
 #define SOUND_H_
 
 void Play_speaker(int freq, int len_ms);
-
+void score_sound();
+void bounce_sound();
+void paddle_sound();
 
 
 #endif /* SOUND_H_ */

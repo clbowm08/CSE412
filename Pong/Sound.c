@@ -58,3 +58,18 @@ void SET_SPEAKER_PARAMS()
 	sei();//enable global interrupts
 }
 
+void score_sound(){
+	Play_speaker(400,1000);
+	_delay_ms(8000);
+	Play_speaker(440,1000);
+	_delay_ms(8000);
+	Play_speaker(380,1000);
+	_delay_ms(8000);
+}
+	
+void bounce_sound(){
+	Play_speaker(120,500);
+}
+void paddle_sound(){
+	Play_speaker(240,500);
+}

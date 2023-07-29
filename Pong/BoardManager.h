@@ -11,6 +11,7 @@
 
 void ResetBoard(struct Player *player);
 
-void UpdateBoard(struct Player *player);
+void UpdateBoard(struct Player *player,struct Ball *ball);
 
+void DetectUpdateScore(struct Player *player,struct Ball *ball);
 #endif /* BOARDMANAGER_H_ */
