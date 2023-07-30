@@ -10,6 +10,8 @@
 #include "LCD.h"
 #include <avr/io.h>
 
+#define PADDLE_VELOCITY 5
+
 void InitInputs(struct Player *player)
 {	
 	//Initializing data direction register for button ports to be Inputs
@@ -87,70 +89,42 @@ void CheckInputs(struct Player *player)
 	}
 	
 	//Checking up flag boundaries
-	if ((player[0].upFlag == true) && (player[0].yPos <= 1))
+	if ((player[0].upFlag == true) && ((int)(player[0].yPos) <= 1))
 	{
 		player[0].upFlag = false;
 	}
-	if ((player[1].upFlag == true) && (player[1].yPos <= 1))
+	if ((player[1].upFlag == true) && ((int)(player[1].yPos) <= 1))
 	{
 		player[1].upFlag = false;
 	}
 	
 	//Checking down flag boundaries
-	if ((player[0].downFlag == true) && (player[0].yPos >= 3))
+	if ((player[0].downFlag == true) && ((int)(player[0].yPos) >= 3))
 	{
 		player[0].downFlag = false;
 	}
-	if ((player[1].downFlag == true) && (player[1].yPos >= 3))
+	if ((player[1].downFlag == true) && ((int)(player[1].yPos) >= 3))
 	{
 		player[1].downFlag = false;
 	}
-	
-	////Temp tings
-	//bool lightOn = false;
-	//if (player[0].downFlag == true)
-	//{
-		//lightOn = true;
-	//}
-	//if (player[0].upFlag == true)
-	//{
-		//lightOn = true;
-	//}
-	//if (player[1].downFlag == true)
-	//{
-		//lightOn = true;
-	//}
-	//if (player[1].upFlag == true)
-	//{
-		//lightOn = true;
-	//}
-	//
-	//if (lightOn)
-	//{
-		//PORTB = (1 << PORTB5);
-	//}
-	//else
-	//{
-		//PORTB = (0 << PORTB5);
-	//}
 }
 
-void ExecuteInputs(struct Player *player)
+void ExecuteInputs(struct Player *player, float deltaTime)
 {
 	if (player[0].upFlag)
 	{	
-		player[0].yPos -= 1;
+		player[0].yPos -= PADDLE_VELOCITY * deltaTime;
 	}
 	if (player[0].downFlag)
 	{
-		player[0].yPos += 1;
+		player[0].yPos += PADDLE_VELOCITY * deltaTime;
 	}
 	if (player[1].upFlag)
 	{
-		player[1].yPos -= 1;
+		player[1].yPos -= PADDLE_VELOCITY * deltaTime;
 	}
 	if (player[1].downFlag)
 	{
-		player[1].yPos += 1;
+		player[1].yPos += PADDLE_VELOCITY * deltaTime;
 	}
 }

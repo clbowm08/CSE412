@@ -36,15 +36,15 @@ void UpdateBoard(struct Player *player,struct Ball *ball)
 	SendCommand(0x02);
 	printscore(player[0].score,3);
 	printscore(player[1].score,16);
-	SetCursorPosition(ball[0].xPos,ball[0].yPos);
+	SetCursorPosition(round(ball[0].xPos),round(ball[0].yPos));
 	SendData('o');
-	SetCursorPosition(player[0].xPos+2, player[0].yPos);
+	SetCursorPosition((int)(player[0].xPos+2), round(player[0].yPos));
 	SendData(0x7C);
-	SetCursorPosition((player[0].xPos)+2, (player[0].yPos + 1));
+	SetCursorPosition((int)((player[0].xPos)+2), round((player[0].yPos) + 1));
 	SendData(0x7C);
-	SetCursorPosition(player[1].xPos+2, player[1].yPos);
+	SetCursorPosition((int)(player[1].xPos+2), round(player[1].yPos));
 	SendData(0x7C);
-	SetCursorPosition(player[1].xPos+2, (player[1].yPos + 1));
+	SetCursorPosition((int)(player[1].xPos+2), round((player[1].yPos) + 1));
 	SendData(0x7C);
 
 	//SetCursorPosition(ball[0].xPos,ball[0].yPos);
@@ -67,20 +67,20 @@ void printscore(unsigned char score, unsigned char xpos){
 	out = score/100+48;
 	SendData(out);
 }
-DetectUpdateScore(struct Player *player,struct Ball *ball){
-	if(ball[0].xPos == 1){
+DetectUpdateScore(struct Player *player,struct Ball *ball, char *resetDeltaTime){
+	if((ball[0].xPos <= 1) && (ball[0].xVel < 0)){
 		player[1].score+=1;
 		ball[0].xPos +=10; 
 		score_sound();
 		_delay_ms(3000);
-		
+		*resetDeltaTime = 1;
 		
 	}
-	if(ball[0].xPos == 20){
+	if((ball[0].xPos >= 20) && (ball[0].xVel > 0)){
 		player[0].score+=1;
 		ball[0].xPos -=10;
 		score_sound();
 		_delay_ms(2500);
-		
+		*resetDeltaTime = 1;
 	}
 }

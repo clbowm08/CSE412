@@ -10,13 +10,13 @@
 #define PHYSICS_H_
 
 typedef struct Ball{
-	unsigned char xPos;
-	unsigned char yPos;
+	float xPos;
+	float yPos;
 	signed char xVel;
 	signed char yVel;
 }Ball_t;
-void UpdateBallPosVel(struct Ball *ball);
+void UpdateBallPosVel(struct Ball *ball, float deltaTime);
 void init_ball(struct Ball *ball, unsigned char xpos, unsigned char ypos, signed char xvel,signed char yvel);
-void reflect_paddles(unsigned char p1_x,unsigned char p1_y,unsigned char p2_x, unsigned char p2_y,struct Ball *ball);
+void reflect_paddles(float p1_x, float p1_y, float p2_x, float p2_y, struct Ball *ball);
 
 #endif /* PHYSICS_H_ */
