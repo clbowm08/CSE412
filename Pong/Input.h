@@ -20,8 +20,10 @@ typedef struct Player
 {
 	bool upFlag;
 	bool downFlag;
-	float xPos;
+	unsigned char xPos;
 	float yPos;
+	unsigned char prevYCoord;
+	unsigned char curYCoord;
 	unsigned char score;
 }Player_t;
 

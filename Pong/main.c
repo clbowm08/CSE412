@@ -72,7 +72,7 @@ int main(void)
 	    PollInputs(player);
 	    CheckInputs(player);
 		ExecuteInputs(player, deltaTime);
-		reflect_paddles(player[0].xPos,player[0].yPos,player[1].xPos,player[1].yPos,ball);
+		reflect_paddles(player, ball);
 		UpdateBallPosVel(ball, deltaTime);
 		char resetDeltaTime = 0;
 		DetectUpdateScore(player, ball, &resetDeltaTime);

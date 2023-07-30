@@ -5,32 +5,35 @@
  *  Author: Joey Lyvers
  */ 
 #include "Physics.h"
-//#include "Input.h"
 #include "Sound.h"
 #define xmax 20
 #define ymax 4
 #define xmin 1
 #define ymin 1
 
-#define BALL_SPEED 5
 void init_ball(struct Ball *ball, unsigned char xpos, unsigned char ypos, signed char xvel,signed char yvel){
 	ball[0].xPos = xpos;
 	ball[0].yPos = ypos;
 	ball[0].xVel = xvel;
 	ball[0].yVel = yvel;
+	ball[0].curXCoord = 0;
+	ball[0].curYCoord = 0;
+	ball[0].prevXCoord = 0;
+	ball[0].prevYCoord = 0;
+	ball[0].speedOfBall = 1;
 }
 void UpdateBallPosVel(struct Ball *ball, float deltaTime){
 	UpdateBallVel(ball);
-	ball[0].xPos +=(ball[0].xVel * deltaTime * BALL_SPEED);
-	ball[0].yPos +=(ball[0].yVel * deltaTime * BALL_SPEED);
+	ball[0].prevXCoord = ball[0].curXCoord;
+	ball[0].prevYCoord = ball[0].curYCoord; 
+	
+	ball[0].xPos +=(ball[0].xVel * deltaTime * ball[0].speedOfBall);
+	ball[0].yPos +=(ball[0].yVel * deltaTime * 5);
+	
+	ball[0].curXCoord = round(ball[0].xPos);
+	ball[0].curYCoord = round(ball[0].yPos);
 }
 void UpdateBallVel(struct Ball *ball){
-	if (ball[0].xPos <= xmin & ball[0].xVel<0){
-		//Play_speaker(440,500);
-	}
-	if ((ball[0].xPos >= xmax) && (ball[0].xVel>0)){
-		//Play_speaker(440,500);
-	}
 	if ((ball[0].yPos <= ymin) && (ball[0].yVel<0)){
 		ball[0].yVel = -1*ball[0].yVel;
 		bounce_sound();
@@ -40,16 +43,18 @@ void UpdateBallVel(struct Ball *ball){
 		bounce_sound();
 	}
 }
-void reflect_paddles(float p1_x, float p1_y, float p2_x, float p2_y, struct Ball *ball){
-	if(((ball[0].xPos <= p1_x + 4)&&(ball[0].xVel < 0)) && ((round(ball[0].yPos) >= round(p1_y)) && (round(ball[0].yPos) <= round(p1_y + 1))))
+void reflect_paddles(struct Player *player, struct Ball *ball){
+	if(((ball[0].curXCoord <= (player[0].xPos + 3)) && (ball[0].xVel < 0)) && ((ball[0].curYCoord >= player[0].curYCoord) && (ball[0].curYCoord <= player[0].curYCoord + 1)))
 	{
 		ball[0].xVel = -1 * ball[0].xVel;
 		paddle_sound();
+		ball[0].speedOfBall += 1;
 	}
-	if(((ball[0].xPos >= p2_x + 1)&&(ball[0].xVel > 0)) && ((round(ball[0].yPos) >= round(p2_y)) && (round(ball[0].yPos) <= round(p2_y + 1))))
+	if(((ball[0].curXCoord > (player[1].xPos)) && (ball[0].xVel > 0)) && ((ball[0].curYCoord >= player[1].curYCoord) && (ball[0].curYCoord <= player[1].curYCoord + 1)))
 	{
 		ball[0].xVel = -1 * ball[0].xVel;
 		paddle_sound();
+		ball[0].speedOfBall += 1;
 	}
 	
 }

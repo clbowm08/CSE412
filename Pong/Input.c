@@ -28,6 +28,11 @@ void InitInputs(struct Player *player)
 	
 	//Initializing LED output (CAN BE DELETED AFTER DEBUG PHASE)
 	DDRB |= (1 << DDRB5);
+	
+	player[0].prevYCoord = 0;
+	player[0].curYCoord = 0;
+	player[1].prevYCoord = 0;
+	player[1].curYCoord = 0;
 }
 
 void PollInputs(struct Player *player)
@@ -89,21 +94,21 @@ void CheckInputs(struct Player *player)
 	}
 	
 	//Checking up flag boundaries
-	if ((player[0].upFlag == true) && ((int)(player[0].yPos) <= 1))
+	if ((player[0].upFlag == true) && (player[0].curYCoord <= 1))
 	{
 		player[0].upFlag = false;
 	}
-	if ((player[1].upFlag == true) && ((int)(player[1].yPos) <= 1))
+	if ((player[1].upFlag == true) && (player[1].curYCoord <= 1))
 	{
 		player[1].upFlag = false;
 	}
 	
 	//Checking down flag boundaries
-	if ((player[0].downFlag == true) && ((int)(player[0].yPos) >= 3))
+	if ((player[0].downFlag == true) && (player[0].curYCoord >= 3))
 	{
 		player[0].downFlag = false;
 	}
-	if ((player[1].downFlag == true) && ((int)(player[1].yPos) >= 3))
+	if ((player[1].downFlag == true) && (player[1].curYCoord >= 3))
 	{
 		player[1].downFlag = false;
 	}
@@ -111,6 +116,8 @@ void CheckInputs(struct Player *player)
 
 void ExecuteInputs(struct Player *player, float deltaTime)
 {
+	player[0].prevYCoord = player[0].curYCoord;
+	player[1].prevYCoord = player[1].curYCoord;
 	if (player[0].upFlag)
 	{	
 		player[0].yPos -= PADDLE_VELOCITY * deltaTime;
@@ -127,4 +134,6 @@ void ExecuteInputs(struct Player *player, float deltaTime)
 	{
 		player[1].yPos += PADDLE_VELOCITY * deltaTime;
 	}
+	player[0].curYCoord = round(player[0].yPos);
+	player[1].curYCoord = round(player[1].yPos);
 }
